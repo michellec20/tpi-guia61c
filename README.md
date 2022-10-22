@@ -1,1 +1,0 @@
-# tpi-guia61c
