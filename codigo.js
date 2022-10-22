@@ -1,4 +1,4 @@
-var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><td class='title'></td><td class='description'></td><td class='category'></td></tr>";
+var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><td class='title'></td><td class='description'></td><td class='category'></td><td class='accion'></td></tr>";
 	 var productos=null;
   function codigoCat(catstr) {
 	var code="null";
@@ -18,7 +18,7 @@ var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><
 	  precio.setAttribute("onclick", "orden*=-1;listarProductos(productos);");
 	  var num=productos.length;
 	  var listado=document.getElementById("listado");
-	  var ids,titles,prices,descriptions,categories,fotos;
+	  var ids,titles,prices,descriptions,categories,fotos, acciones;
 	  var tbody=document.getElementById("tbody"),nfila=0;
 	  tbody.innerHTML="";
 	  var catcode;
@@ -29,6 +29,7 @@ var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><
 	  descriptions=document.getElementsByClassName("description");
 	  categories=document.getElementsByClassName("category");   
 	  fotos=document.getElementsByClassName("foto");   
+	  acciones=document.getElementsByClassName("accion");
 	  prices=document.getElementsByClassName("price");   
 	  if(orden===0) {orden=-1;precio.innerHTML="Precio"}
 	  else
@@ -49,6 +50,8 @@ var fila="<tr><td class='id'></td><td class='foto'></td><td class='price'></td><
 		prices[nfila].innerHTML="$"+productos[nfila].price;
 		fotos[nfila].innerHTML="<img src='"+productos[nfila].image+"'>";
 		fotos[nfila].firstChild.setAttribute("onclick","window.open('"+productos[nfila].image+"');" );
+
+		acciones[nfila].innerHTML="<button onclick='eliminarProducto();'>Eliminar</button>";
 		}
 	}
 
@@ -88,4 +91,14 @@ function agregarProducto() {
 	producto.category=document.getElementById("category").value;
 	productos.push(producto);
 	listarProductos(productos);
+}
+
+function eliminarProducto(nfila){
+	var direccion="https://retoolapi.dev/kLKaGI/productos"+nfila;
+		fetch(direccion, 
+			{method: "DELETE"})
+			.then(response=>response.json())
+			.then(data=>{productos=data;listarProductos(data)});
+			window.alert("Producto eliminado");
+		return
 }
